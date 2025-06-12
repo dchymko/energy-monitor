@@ -1,2 +1,7 @@
 *.pyc
 __pycache__/*
+lib/
+lib64
+bin
+.github
+keys.json

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Solar Dashboard{% endblock %}
+
+{% block content %}
+<h1>Power usage dashboard</h1>
+<h4>Last updated at {{ updated.strftime('%B %d, %Y at %I:%M %p') if updated else 'Unknown' }}</h4>
+    <div class="mt-4 overflow-x-auto">
+
+        <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Device ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usage</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for value in vue_data %}
+                    {% if not loop.first %}
+                        {% set parts = value.split('|') %}
+                        {% if parts|length >= 4 %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{ parts[0]}}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    {{ parts[2] }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                        {% if parts[3].split()[0]|float >= 0 %}bg-blue-100 text-blue-800{% else %}bg-green-100 text-green-800{% endif %}">
+                                        {{ parts[3] }} {{ parts[4] if parts|length > 4 else '' }}
+                                    </span>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

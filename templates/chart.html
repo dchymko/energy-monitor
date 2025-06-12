@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Chart - Solar Dashboard{% endblock %}
+
+{% block content %}
+<h1>Daily Usage</h1>
+<div class="mt-4">
+    <div class="chart-container">
+        {% for value in vue_data %}
+        <div class="bar-wrapper">
+            <div class="bar {% if value >= 0 %}bar-positive{% else %}bar-negative{% endif %}" style="height: {{ (value|abs / vue_data|map('abs')|max * 300)|round }}px;"></div>
+            <div class="bar-label">{{ "%.2f"|format(value) }}</div>
+            <div class="bar-index">Day {{ loop.index }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .chart-container {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-around;
+        height: 400px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fafafa;
+        margin-top: 20px;
+    }
+
+    .bar-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        max-width: 80px;
+    }
+
+    .bar {
+        width: 40px;
+        border-radius: 4px 4px 0 0;
+        min-height: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .bar-positive {
+        background: linear-gradient(to top, #2196F3, #64B5F6);
+    }
+
+    .bar-negative {
+        background: linear-gradient(to top, #4CAF50, #81C784);
+    }
+
+    .bar-positive:hover {
+        background: linear-gradient(to top, #1976D2, #42A5F5);
+        transform: scale(1.05);
+    }
+
+    .bar-negative:hover {
+        background: linear-gradient(to top, #45a049, #66bb6a);
+        transform: scale(1.05);
+    }
+
+    .bar-label {
+        margin-top: 8px;
+        font-weight: bold;
+        color: #333;
+        font-size: 14px;
+    }
+
+    .bar-index {
+        margin-top: 4px;
+        font-size: 12px;
+        color: #666;
+    }
+</style>
+{% endblock %}
